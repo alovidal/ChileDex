@@ -45,16 +45,16 @@ Actualmente nos encontramos en la **fase inicial** (desarrollo de la arquitectur
 ## 📊 Estadísticas del Repositorio
 
 <!-- Badges dinámicos de estado -->
-![Commits](https://img.shields.io/github/commit-activity/m/TU_USUARIO/TU_REPOSITORIO?style=for-the-badge&color=blue&logo=git)
-![Último Commit](https://img.shields.io/github/last-commit/TU_USUARIO/TU_REPOSITORIO?style=for-the-badge&color=brightgreen)
-![Contributors](https://img.shields.io/github/contributors/TU_USUARIO/TU_REPOSITORIO?style=for-the-badge&color=orange)
-![Issues Abiertos](https://img.shields.io/github/issues/TU_USUARIO/TU_REPOSITORIO?style=for-the-badge&color=yellow)
+![Commits](https://img.shields.io/github/commit-activity/m/alovidal/ChileDex?style=for-the-badge&color=blue&logo=git)
+![Último Commit](https://img.shields.io/github/last-commit/alovidal/ChileDex?style=for-the-badge&color=brightgreen)
+![Contributors](https://img.shields.io/github/contributors/alovidal/ChileDex?style=for-the-badge&color=orange)
+![Issues Abiertos](https://img.shields.io/github/issues/alovidal/ChileDex?style=for-the-badge&color=yellow)
 
 ---
 
 <!-- Gráfico de actividad de commits y contribuidores -->
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api/pin/?username=TU_USUARIO&repo=TU_REPOSITORIO&theme=tokyonight" alt="Estadísticas de ChileDex" />
+  <img src="https://github-readme-stats.vercel.app/api/pin/?username=alovidal&repo=ChileDex&theme=tokyonight" alt="Estadísticas de ChileDex" />
 </p>
 
 ---
