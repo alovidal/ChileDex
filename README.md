@@ -30,7 +30,7 @@ El stack tecnológico inicial (sujeto a evolución durante el desarrollo) está 
 
 Proyecto de título desarrollado por estudiantes de **Duoc UC** (Sede Antonio Varas):
 
-### 👥 Integrantes y Roles
+### Integrantes y Roles
 
 | Foto / Avatar | Nombre | Rol Principal |
 | :---: | :--- | :--- |
