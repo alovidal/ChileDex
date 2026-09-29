@@ -34,13 +34,28 @@ Proyecto de título desarrollado por estudiantes de **Duoc UC** (Sede Antonio Va
 
 | Foto / Avatar | Nombre | Rol Principal |
 | :---: | :--- | :--- |
-| <img src="https://github.com/github.png" width="50" style="border-radius:50%"> | **Alonso Vidal Moreno** | Lead / Backend & IA |
-| <img src="https://github.com/github.png" width="50" style="border-radius:50%"> | **Ignacio Correa Ramírez** | Frontend Developer |
-| <img src="https://github.com/github.png" width="50" style="border-radius:50%"> | **Narayani García Chamorro** | Full Stack / UI-UX |
+| <img src="https://github.com/alovidal.png" width="50" style="border-radius:50%"> | **Alonso Vidal Moreno** | Lead / Backend & IA |
+| <img src="https://github.com/ignaciocorrea1.png" width="50" style="border-radius:50%"> | **Ignacio Correa Ramírez** | Frontend Developer |
+| <img src="https://github.com/NarayaniGarcia.png" width="50" style="border-radius:50%"> | **Narayani García Chamorro** | Full Stack / UI-UX |
 
 ## Metodología y Estado
 
 Actualmente nos encontramos en la **fase inicial** (desarrollo de la arquitectura base y frontend).
+
+## 📊 Estadísticas del Repositorio
+
+<!-- Badges dinámicos de estado -->
+![Commits](https://img.shields.io/github/commit-activity/m/TU_USUARIO/TU_REPOSITORIO?style=for-the-badge&color=blue&logo=git)
+![Último Commit](https://img.shields.io/github/last-commit/TU_USUARIO/TU_REPOSITORIO?style=for-the-badge&color=brightgreen)
+![Contributors](https://img.shields.io/github/contributors/TU_USUARIO/TU_REPOSITORIO?style=for-the-badge&color=orange)
+![Issues Abiertos](https://img.shields.io/github/issues/TU_USUARIO/TU_REPOSITORIO?style=for-the-badge&color=yellow)
+
+---
+
+<!-- Gráfico de actividad de commits y contribuidores -->
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api/pin/?username=TU_USUARIO&repo=TU_REPOSITORIO&theme=tokyonight" alt="Estadísticas de ChileDex" />
+</p>
 
 ---
 *Desarrollado para la asignatura Capstone - Docente: Rocio Contreras Aguila.*
