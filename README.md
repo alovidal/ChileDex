@@ -34,9 +34,9 @@ Proyecto de título desarrollado por estudiantes de **Duoc UC** (Sede Antonio Va
 
 | Foto / Avatar | Nombre | Rol Principal |
 | :---: | :--- | :--- |
-| <img src="https://github.com/alovidal.png" width="50" style="border-radius:50%"> | **Alonso Vidal Moreno** | Lead / Backend & IA |
-| <img src="https://github.com/ignaciocorrea1.png" width="50" style="border-radius:50%"> | **Ignacio Correa Ramírez** | Frontend Developer |
-| <img src="https://github.com/NarayaniGarcia.png" width="50" style="border-radius:50%"> | **Narayani García Chamorro** | Full Stack / UI-UX |
+| <img src="https://github.com/alovidal.png" width="50" style="border-radius:50%"> | **Alonso Vidal Moreno** | . |
+| <img src="https://github.com/ignaciocorrea1.png" width="50" style="border-radius:50%"> | **Ignacio Correa Ramírez** | . |
+| <img src="https://github.com/NarayaniGarcia.png" width="50" style="border-radius:50%"> | **Narayani García Chamorro** | . |
 
 ## Metodología y Estado
 
