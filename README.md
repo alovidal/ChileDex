@@ -40,7 +40,9 @@ Proyecto de título desarrollado por estudiantes de **Duoc UC** (Sede Antonio Va
 
 ## Metodología y Estado
 
-Actualmente nos encontramos en la **fase inicial** (desarrollo de la arquitectura base y frontend).
+(Falta Rellenar)
+
+## Ejecucion Local
 
 ---
 *Desarrollado para la asignatura Capstone - Docente: Rocio Contreras Aguila.*
