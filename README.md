@@ -28,8 +28,6 @@ El stack tecnológico inicial (sujeto a evolución durante el desarrollo) está 
 
 ## Ejecución Local
 
-> **Nota:** Estas instrucciones son una plantilla preliminar. Se actualizarán a medida que el desarrollo avance hacia fases más estables.
-
 ### Requisitos Previos
 *   [Flutter SDK](https://docs.flutter.dev/get-started/install) instalado.
 *   [Python 3.9+](https://www.python.org/) instalado.
