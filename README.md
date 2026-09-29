@@ -42,16 +42,5 @@ Proyecto de título desarrollado por estudiantes de **Duoc UC** (Sede Antonio Va
 
 Actualmente nos encontramos en la **fase inicial** (desarrollo de la arquitectura base y frontend).
 
-## Estadísticas de GitHub
-
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=alovidal&theme=dark&hide_border=false&include_all_commits=true&count_private=true" alt="Estadísticas de GitHub" />
-  <br/><br/>
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=alovidal&theme=dark&hide_border=false&include_all_commits=true&count_private=true&layout=compact" alt="Lenguajes más usados" />
-</p>
-
-<p align="center">
-  ⭐ ¡Gracias por visitar el repositorio!
-</p>
 ---
 *Desarrollado para la asignatura Capstone - Docente: Rocio Contreras Aguila.*
