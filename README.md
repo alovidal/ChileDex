@@ -42,20 +42,16 @@ Proyecto de título desarrollado por estudiantes de **Duoc UC** (Sede Antonio Va
 
 Actualmente nos encontramos en la **fase inicial** (desarrollo de la arquitectura base y frontend).
 
-## 📊 Estadísticas del Repositorio
+## Estadísticas de GitHub
 
-<!-- Badges dinámicos de estado -->
-![Commits](https://img.shields.io/github/commit-activity/m/alovidal/ChileDex?style=for-the-badge&color=blue&logo=git)
-![Último Commit](https://img.shields.io/github/last-commit/alovidal/ChileDex?style=for-the-badge&color=brightgreen)
-![Contributors](https://img.shields.io/github/contributors/alovidal/ChileDex?style=for-the-badge&color=orange)
-![Issues Abiertos](https://img.shields.io/github/issues/alovidal/ChileDex?style=for-the-badge&color=yellow)
-
----
-
-<!-- Gráfico de actividad de commits y contribuidores -->
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api/pin/?username=alovidal&repo=ChileDex&theme=tokyonight" alt="Estadísticas de ChileDex" />
+  <img src="https://github-readme-stats.vercel.app/api?username=alovidal&theme=dark&hide_border=false&include_all_commits=true&count_private=true" alt="Estadísticas de GitHub" />
+  <br/><br/>
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=alovidal&theme=dark&hide_border=false&include_all_commits=true&count_private=true&layout=compact" alt="Lenguajes más usados" />
 </p>
 
+<p align="center">
+  ⭐ ¡Gracias por visitar el repositorio!
+</p>
 ---
 *Desarrollado para la asignatura Capstone - Docente: Rocio Contreras Aguila.*
