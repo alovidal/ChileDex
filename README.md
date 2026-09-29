@@ -21,17 +21,10 @@ Diagrama de arquitectura
 
 El stack tecnológico inicial (sujeto a evolución durante el desarrollo) está compuesto por:
 
-*   **Frontend:** Flutter (Dart)
-*   **Backend:** Python con FastAPI
-*   **Base de Datos:** Supabase
+*   **Frontend:** ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white) Flutter (Dart)
+*   **Backend:** ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white) Python con FastAPI
+*   **Base de Datos:** ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white) Supabase
 *   **Inteligencia Artificial:** Redes neuronales propias
-
-## Ejecución Local
-
-### Requisitos Previos
-*   [Flutter SDK](https://docs.flutter.dev/get-started/install) instalado.
-*   [Python 3.9+](https://www.python.org/) instalado.
-*   Credenciales y configuración del proyecto en [Supabase](https://supabase.com/).
 
 ## Integrantes y Roles
 
