@@ -24,7 +24,7 @@ El stack tecnológico inicial (sujeto a evolución durante el desarrollo) está 
 * **Frontend:** ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white) ![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)
 * **Backend:** ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white) ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 * **Base de Datos:** ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
-*   **Inteligencia Artificial:** Redes neuronales propias
+*   **Inteligencia Artificial:** Modelo extraido de Hugging Face - BioCLIP-2
 
 ## Integrantes y Roles
 
@@ -34,9 +34,9 @@ Proyecto de título desarrollado por estudiantes de **Duoc UC** (Sede Antonio Va
 
 | Foto / Avatar | Nombre | Rol Principal |
 | :---: | :--- | :--- |
-| <img src="https://github.com/alovidal.png" width="50" style="border-radius:50%"> | **Alonso Vidal Moreno** | . |
-| <img src="https://github.com/ignaciocorrea1.png" width="50" style="border-radius:50%"> | **Ignacio Correa Ramírez** | . |
-| <img src="https://github.com/NarayaniGarcia.png" width="50" style="border-radius:50%"> | **Narayani García Chamorro** | . |
+| <img src="https://github.com/alovidal.png" width="50" style="border-radius:50%"> | **Alonso Vidal Moreno** | Roles compàrtidos |
+| <img src="https://github.com/ignaciocorrea1.png" width="50" style="border-radius:50%"> | **Ignacio Correa Ramírez** | Roles compàrtidos |
+| <img src="https://github.com/NarayaniGarcia.png" width="50" style="border-radius:50%"> | **Narayani García Chamorro** | Roles compàrtidos |
 
 ## Metodología y Estado
 
