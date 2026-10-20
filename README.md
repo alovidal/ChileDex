@@ -15,17 +15,18 @@
 ## Arquitectura
 
 El proyecto está diseñado bajo una arquitectura moderna cliente-servidor que integra modelos de inteligencia artificial:
-Diagrama de arquitectura
+
+![Arquitectura Chiledex](Fase%202/Evidencias%20proyecto/Evidencias%20de%20documentaci%C3%B3n/Arquitectura%20Chiledex.png)
 
 ## Tecnologías
 
-El stack tecnológico inicial (sujeto a evolución durante el desarrollo) está compuesto por:
+El stack tecnológico inicial está compuesto por:
 
 * **Frontend:** ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white) ![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)
 * **Backend:** ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white) ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 * **Base de Datos:** ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
-*   **Inteligencia Artificial:** Modelo extraido de Hugging Face - BioCLIP-2
-
+* **Inteligencia Artificial:** ![Hugging Face](https://img.shields.io/badge/Hugging%20Face-BioCLIP--2-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black&labelColor=FFD21E)
+  
 ## Integrantes y Roles
 
 Proyecto de título desarrollado por estudiantes de **Duoc UC** (Sede Antonio Varas):
