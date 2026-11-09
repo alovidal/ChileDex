@@ -27,27 +27,24 @@ class _MapaScreenState extends State<MapaScreen> {
   static const _centroChile = LatLng(-33.45, -70.65);
 
   // ── Controladores y servicios ────────────────────────────────────────────
-  // Stream que alimenta el punto azul de ubicación actual en el mapa
-  final _posicionController =
-      StreamController<LocationMarkerPosition?>.broadcast();
-  final _service        = AvistamientoService();
-  final _mapController  = MapController();
+  final _service         = AvistamientoService();
+  final _mapController   = MapController();
   final _sheetController = DraggableScrollableController();
 
   // ── Estado del mapa ──────────────────────────────────────────────────────
-  List<AvistamientoMapaModel> _avistamientos     = []; // todos (marcadores)
-  List<AvistamientoMapaModel> _avistamientosZona = []; // visibles en zona
-  bool _isLoading        = true;
-  bool _sheetExpandido   = false;
+  List<AvistamientoMapaModel> _avistamientos     = [];
+  List<AvistamientoMapaModel> _avistamientosZona = [];
+  bool _isLoading         = true;
+  bool _sheetExpandido    = false;
   bool _cargandoUbicacion = false;
-  bool _mapaListo        = false; // true una vez que onMapReady dispara
+  bool _mapaListo         = false;
 
   // ── Buscador flotante ────────────────────────────────────────────────────
   final _buscadorController = TextEditingController();
   final _buscadorFocus      = FocusNode();
-  final _buscadorKey        = GlobalKey(); // ancla para posicionar el overlay
+  final _buscadorKey        = GlobalKey();
   List<Map<String, dynamic>> _sugerencias = [];
-  Timer?       _debounceBusqueda;
+  Timer?        _debounceBusqueda;
   OverlayEntry? _overlayEntry;
 
   // ── Paginación por zona ──────────────────────────────────────────────────
@@ -57,8 +54,6 @@ class _MapaScreenState extends State<MapaScreen> {
   int  _totalEnZona  = 0;
 
   // ── Debounce del movimiento del mapa ────────────────────────────────────
-  // Almacena el instante del último movimiento; si cambió antes de 600 ms,
-  // la carga de zona se cancela y se espera el siguiente reposo.
   DateTime? _ultimoMovimiento;
 
   // ════════════════════════════════════════════════════════════════════════
@@ -68,7 +63,7 @@ class _MapaScreenState extends State<MapaScreen> {
   @override
   void initState() {
     super.initState();
-    _cargarTodos(); // carga inicial de todos los marcadores
+    _cargarTodos();
   }
 
   @override
@@ -76,7 +71,6 @@ class _MapaScreenState extends State<MapaScreen> {
     _debounceBusqueda?.cancel();
     _mapController.dispose();
     _sheetController.dispose();
-    _posicionController.close();
     _buscadorController.dispose();
     _buscadorFocus.dispose();
     _overlayEntry?.remove();
@@ -87,7 +81,6 @@ class _MapaScreenState extends State<MapaScreen> {
   // Carga de datos
   // ════════════════════════════════════════════════════════════════════════
 
-  /// Descarga todos los avistamientos para pintar los marcadores iniciales.
   Future<void> _cargarTodos() async {
     try {
       final data = await _service.obtenerMapa();
@@ -106,8 +99,7 @@ class _MapaScreenState extends State<MapaScreen> {
   // Ubicación del usuario
   // ════════════════════════════════════════════════════════════════════════
 
-  /// Pide permiso de GPS al arrancar la pantalla y, si se concede, centra el
-  /// mapa y activa el stream continuo que mueve el punto azul.
+  /// Solo pide permiso y centra el mapa — el ícono lo maneja CurrentLocationLayer.
   Future<void> _pedirUbicacion() async {
     try {
       if (!await Geolocator.isLocationServiceEnabled()) return;
@@ -116,24 +108,6 @@ class _MapaScreenState extends State<MapaScreen> {
       if (permiso == LocationPermission.denied ||
           permiso == LocationPermission.deniedForever) return;
 
-      // Stream continuo — solo emite si el usuario se movió ≥ 5 m
-      Geolocator.getPositionStream(
-        locationSettings: const LocationSettings(
-          accuracy:       LocationAccuracy.high,
-          distanceFilter: 5,
-        ),
-      ).listen(
-        (pos) => _posicionController.add(
-          LocationMarkerPosition(
-            latitude:  pos.latitude,
-            longitude: pos.longitude,
-            accuracy:  pos.accuracy,
-          ),
-        ),
-        onError: (_) {}, // errores de GPS momentáneos se ignoran
-      );
-
-      // Posición puntual para centrar el mapa en el arranque
       final pos = await Geolocator.getCurrentPosition(
         locationSettings: const LocationSettings(
           accuracy:  LocationAccuracy.high,
@@ -146,7 +120,6 @@ class _MapaScreenState extends State<MapaScreen> {
     } catch (_) {}
   }
 
-  /// Botón FAB — recentra el mapa en la posición actual del usuario.
   Future<void> _centrarEnUsuario() async {
     setState(() => _cargandoUbicacion = true);
 
@@ -189,7 +162,6 @@ class _MapaScreenState extends State<MapaScreen> {
   // Buscador de ubicación (Nominatim)
   // ════════════════════════════════════════════════════════════════════════
 
-  /// Dispara la carga de sugerencias con debounce de 400 ms.
   void _onTextoBuscador(String texto) {
     _debounceBusqueda?.cancel();
     if (texto.trim().length < 3) {
@@ -201,7 +173,6 @@ class _MapaScreenState extends State<MapaScreen> {
     });
   }
 
-  /// Consulta Nominatim y almacena hasta 5 sugerencias para Chile.
   Future<void> _cargarSugerencias(String query) async {
     try {
       final uri = Uri.https('nominatim.openstreetmap.org', '/search', {
@@ -230,7 +201,6 @@ class _MapaScreenState extends State<MapaScreen> {
     } catch (_) {}
   }
 
-  /// Mueve el mapa a la sugerencia seleccionada y cierra el overlay.
   void _seleccionarSugerencia(Map<String, dynamic> s) {
     _buscadorController.text = s['nombre'] as String;
     _buscadorFocus.unfocus();
@@ -238,7 +208,6 @@ class _MapaScreenState extends State<MapaScreen> {
     _mapController.move(LatLng(s['lat'] as double, s['lon'] as double), 13);
   }
 
-  /// Limpia el campo de texto y descarta las sugerencias.
   void _limpiarBuscador() {
     _buscadorController.clear();
     _cerrarOverlay();
@@ -249,7 +218,6 @@ class _MapaScreenState extends State<MapaScreen> {
   // Overlay de sugerencias
   // ════════════════════════════════════════════════════════════════════════
 
-  /// Inserta el dropdown de sugerencias justo debajo del campo de búsqueda.
   void _mostrarOverlay() {
     _cerrarOverlay();
     if (_sugerencias.isEmpty) return;
@@ -309,20 +277,16 @@ class _MapaScreenState extends State<MapaScreen> {
   // Filtro por zona visible del mapa
   // ════════════════════════════════════════════════════════════════════════
 
-  /// Callback de `onPositionChanged` — aplica debounce para no disparar una
-  /// petición en cada pixel del gesto de paneo o zoom.
   void _onMapaMoved(MapCamera camera) {
     _debounceZona(camera);
   }
 
-  /// Espera 600 ms de reposo antes de cargar la zona; si el mapa sigue
-  /// moviéndose, el timestamp cambia y la carga anterior se descarta.
   void _debounceZona(MapCamera camera) async {
     final ahora = DateTime.now();
     _ultimoMovimiento = ahora;
 
     await Future.delayed(const Duration(milliseconds: 600));
-    if (_ultimoMovimiento != ahora) return; // mapa aún en movimiento
+    if (_ultimoMovimiento != ahora) return;
 
     final bounds = camera.visibleBounds;
     _cargarZona(
@@ -330,12 +294,10 @@ class _MapaScreenState extends State<MapaScreen> {
       latMax:   bounds.north,
       lonMin:   bounds.west,
       lonMax:   bounds.east,
-      resetear: true, // nueva zona → primera página
+      resetear: true,
     );
   }
 
-  /// Descarga los avistamientos dentro del bounding box visible.
-  /// Con [resetear] = true empieza desde la página 1; false añade la siguiente.
   Future<void> _cargarZona({
     required double latMin,
     required double latMax,
@@ -373,8 +335,8 @@ class _MapaScreenState extends State<MapaScreen> {
           _paginaZona++;
         }
 
-        _totalEnZona  = data['total']   as int;
-        _hayMasEnZona = data['hayMas']  as bool;
+        _totalEnZona  = data['total']  as int;
+        _hayMasEnZona = data['hayMas'] as bool;
         _cargandoMas  = false;
       });
     } catch (_) {
@@ -382,7 +344,6 @@ class _MapaScreenState extends State<MapaScreen> {
     }
   }
 
-  /// Carga la siguiente página de avistamientos dentro de la zona actual.
   Future<void> _cargarMasEnZona() async {
     if (!_hayMasEnZona || _cargandoMas) return;
     setState(() => _cargandoMas = true);
@@ -424,11 +385,11 @@ class _MapaScreenState extends State<MapaScreen> {
     return FlutterMap(
       mapController: _mapController,
       options: MapOptions(
-        initialCenter:   _centroChile,
-        initialZoom:     6,
-        minZoom:         4,
-        maxZoom:         18,
-        onMapReady:      () {
+        initialCenter: _centroChile,
+        initialZoom:   6,
+        minZoom:       4,
+        maxZoom:       18,
+        onMapReady: () {
           _mapaListo = true;
           _pedirUbicacion();
         },
@@ -436,14 +397,13 @@ class _MapaScreenState extends State<MapaScreen> {
       ),
       children: [
         TileLayer(
-          urlTemplate:        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          urlTemplate:          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           userAgentPackageName: 'cl.chiledex.app',
         ),
         MarkerLayer(markers: _buildMarkers()),
 
-        // Punto azul con círculo de precisión
+        // ── Ícono de ubicación — el widget maneja su propio stream GPS ──
         CurrentLocationLayer(
-          positionStream: _posicionController.stream,
           style: const LocationMarkerStyle(
             marker: DefaultLocationMarker(
               color: Colors.blue,
@@ -458,7 +418,6 @@ class _MapaScreenState extends State<MapaScreen> {
     );
   }
 
-  /// Genera un marcador naranja por cada avistamiento cargado.
   List<Marker> _buildMarkers() {
     return _avistamientos.map((a) {
       return Marker(
@@ -474,9 +433,9 @@ class _MapaScreenState extends State<MapaScreen> {
               border: Border.all(color: Colors.white, width: 2),
               boxShadow: [
                 BoxShadow(
-                  color:     AppTheme.accentOrange.withValues(alpha: 0.4),
+                  color:      AppTheme.accentOrange.withValues(alpha: 0.4),
                   blurRadius: 8,
-                  offset:    const Offset(0, 2),
+                  offset:     const Offset(0, 2),
                 ),
               ],
             ),
@@ -487,9 +446,6 @@ class _MapaScreenState extends State<MapaScreen> {
     }).toList();
   }
 
-  // ── Foto de especie ──────────────────────────────────────────────────────
-
-  /// Placeholder cuando no hay foto o falla la decodificación de la imagen.
   Widget _fotoPlaceholder() {
     return Container(
       width:  64,
@@ -502,8 +458,6 @@ class _MapaScreenState extends State<MapaScreen> {
     );
   }
 
-  /// Carga la foto de portada de la especie a tamaño reducido (menos memoria).
-  /// El [errorBuilder] evita el crash por "Failed to decode image".
   Widget _buildFotoEspecie(String? url) {
     if (url == null || url.isEmpty) return _fotoPlaceholder();
 
@@ -512,13 +466,11 @@ class _MapaScreenState extends State<MapaScreen> {
       width:      64,
       height:     64,
       fit:        BoxFit.cover,
-      cacheWidth: 128, // decodifica a resolución reducida
+      cacheWidth: 128,
       errorBuilder: (_, _, _) => _fotoPlaceholder(),
     );
   }
 
-  /// Popup al tocar un marcador — muestra nombre, foto y tiempo relativo.
-  /// Al tocar la card navega a la ficha de la especie.
   void _mostrarDetalleMarker(AvistamientoMapaModel a) {
     showModalBottomSheet(
       context:         context,
@@ -528,14 +480,14 @@ class _MapaScreenState extends State<MapaScreen> {
         onTap: () {
           Navigator.pop(sheetContext);
           Navigator.pushNamed(
-            context, // contexto de la pantalla, sigue montado
+            context,
             AppRoutes.especieDetalle,
             arguments: a.especieId,
           );
         },
         child: Container(
-          margin:    const EdgeInsets.all(16),
-          padding:   const EdgeInsets.all(16),
+          margin:     const EdgeInsets.all(16),
+          padding:    const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color:        AppTheme.cardWhite,
             borderRadius: BorderRadius.circular(16),
@@ -549,7 +501,7 @@ class _MapaScreenState extends State<MapaScreen> {
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
-                  mainAxisSize:     MainAxisSize.min,
+                  mainAxisSize:       MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -585,15 +537,15 @@ class _MapaScreenState extends State<MapaScreen> {
       left:  16,
       right: 16,
       child: Container(
-        key:    _buscadorKey, // ancla del overlay de sugerencias
+        key:    _buscadorKey,
         height: 48,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color:     Colors.black.withValues(alpha: 0.1),
+              color:      Colors.black.withValues(alpha: 0.1),
               blurRadius: 12,
-              offset:    const Offset(0, 2),
+              offset:     const Offset(0, 2),
             ),
           ],
         ),
@@ -612,7 +564,6 @@ class _MapaScreenState extends State<MapaScreen> {
               color: AppTheme.textGray,
               size:  20,
             ),
-            // Botón ✕ — solo visible cuando hay texto
             suffixIcon: ValueListenableBuilder<TextEditingValue>(
               valueListenable: _buscadorController,
               builder: (_, value, _) => value.text.isEmpty
@@ -655,7 +606,7 @@ class _MapaScreenState extends State<MapaScreen> {
   Widget _buildBotonUbicacion() {
     return Positioned(
       right:  16,
-      bottom: 140, // por encima del bottom sheet expandido
+      bottom: 140,
       child: FloatingActionButton.small(
         onPressed:       _cargandoUbicacion ? null : _centrarEnUsuario,
         backgroundColor: AppTheme.cardWhite,
@@ -673,7 +624,7 @@ class _MapaScreenState extends State<MapaScreen> {
   }
 
   // ════════════════════════════════════════════════════════════════════════
-  // Widgets privados — Bottom sheet de avistamientos
+  // Widgets privados — Bottom sheet
   // ════════════════════════════════════════════════════════════════════════
 
   Widget _buildBottomSheet() {
@@ -696,9 +647,9 @@ class _MapaScreenState extends State<MapaScreen> {
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               boxShadow: [
                 BoxShadow(
-                  color:     Colors.black12,
+                  color:      Colors.black12,
                   blurRadius: 12,
-                  offset:    Offset(0, -2),
+                  offset:     Offset(0, -2),
                 ),
               ],
             ),
@@ -709,16 +660,12 @@ class _MapaScreenState extends State<MapaScreen> {
                 _buildSheetHeader(),
                 if (_sheetExpandido) ...[
                   const Divider(height: 1),
-
-                  // Cards de avistamientos de la zona visible
                   ..._avistamientosZona.map(
                     (a) => Padding(
                       padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
                       child:   AvistamientoCardMapa(avistamiento: a),
                     ),
                   ),
-
-                  // Paginación — botón "Ver más" o spinner de carga
                   if (_hayMasEnZona)
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
@@ -745,7 +692,6 @@ class _MapaScreenState extends State<MapaScreen> {
                               ),
                             ),
                     )
-                  // Mensaje de fin de lista
                   else if (_avistamientosZona.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.all(16),
@@ -759,7 +705,6 @@ class _MapaScreenState extends State<MapaScreen> {
                         ),
                       ),
                     ),
-
                   const SizedBox(height: 16),
                 ],
               ],
@@ -770,7 +715,6 @@ class _MapaScreenState extends State<MapaScreen> {
     );
   }
 
-  /// Encabezado del bottom sheet — muestra el conteo de avistamientos en zona.
   Widget _buildSheetHeader() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),

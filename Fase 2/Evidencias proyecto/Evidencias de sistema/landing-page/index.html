@@ -1,0 +1,928 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600&display=swap"
+    />
+    <title>ChileDex</title>
+    <style>
+      /* Variables globales*/
+      :root {
+        --bg: #0d1a0f;
+        --glass-right: rgba(5, 14, 7, 0.72);
+        --border: rgba(120, 180, 100, 0.18);
+        --fg: #e8edd6;
+        --fg-muted: rgba(220, 230, 200, 0.65);
+        --accent: #a8c26a;
+        --accent-warm: #c9a84c;
+        --circle-bg: rgba(12, 28, 14, 0.82);
+        --qr-bg: #f0f0e8;
+        --font-display: "Playfair Display", Georgia, serif;
+        --font-body: "Inter", system-ui, sans-serif;
+        --radius-pill: 999px;
+
+        /* Duración del autoavance del carousel */
+        --slide-duration: 5s;
+
+        color-scheme: dark;
+      }
+
+      /* Base */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        font-family: var(--font-body);
+        font-size: 16px;
+        line-height: 1.6;
+        min-height: 100%;
+        overflow-x: hidden;
+        padding-left: max(16px, env(safe-area-inset-left, 0px));
+        padding-right: max(16px, env(safe-area-inset-right, 0px));
+        padding-block: 0;
+      }
+
+      /* Fondo */
+      .page-wrapper {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        align-items: stretch;
+        background-image: url("./img/bosque.jpg");
+        background-size: cover;
+        background-position: center 30%;
+        background-repeat: no-repeat;
+      }
+
+      /* Overlay oscuro sobre la imagen */
+      .page-wrapper::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(5, 14, 6, 0.78) 0%,
+          rgba(5, 14, 6, 0.45) 40%,
+          rgba(5, 14, 6, 0.55) 60%,
+          rgba(5, 14, 6, 0.82) 100%
+        );
+        z-index: 0;
+      }
+
+      /* Layout */
+      .layout {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+        min-height: 100vh;
+      }
+
+      /* Columna izquierda */
+      .col-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 64px 56px 80px 48px;
+        background: transparent;
+        border-right: 1px solid var(--border);
+        /* overflow hidden para que los slides no se desborden */
+        overflow: hidden;
+      }
+
+      /* Carousel */
+      .carousel {
+        position: relative;
+        width: 100%;
+        /* La altura se define por el contenido del slide más alto */
+        min-height: 380px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Ventana de visión: recorta el track */
+      .carousel-window {
+        flex: 1;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* Track: todos los slides en fila */
+      .carousel-track {
+        display: flex;
+        height: 100%;
+        /* Transición suave al cambiar de slide */
+        transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* Cada slide ocupa exactamente el ancho del contenedor */
+      .slide {
+        flex: 0 0 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-right: 8px; /* pequeño margen interior */
+      }
+
+      /* Contenido de los slide */
+
+      /* Etiqueta superior (eyebrow) */
+      .slide-eyebrow {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 14px;
+        /* Número de slide */
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      /* Número del slide a la izquierda del eyebrow */
+      .slide-eyebrow::before {
+        content: attr(data-num);
+        font-variant-numeric: tabular-nums;
+        font-size: 10px;
+        color: var(--fg-muted);
+        opacity: 0.7;
+      }
+
+      /* Título del slide: grande, serif */
+      .slide-title {
+        font-family: var(--font-display);
+        font-size: clamp(2.4rem, 4.5vw, 4rem);
+        font-weight: 900;
+        line-height: 1;
+        color: var(--fg);
+        text-wrap: balance;
+        margin-bottom: 10px;
+      }
+
+      /* Parte del título en color acento */
+      .slide-title .accent-char {
+        color: var(--accent);
+      }
+
+      /* Subtítulo en cursiva */
+      .slide-subtitle {
+        font-family: var(--font-display);
+        font-style: italic;
+        font-size: clamp(1.4rem, 1.6vw, 1.15rem);
+        color: var(--accent-warm);
+        margin-bottom: 22px;
+        line-height: 1.35;
+      }
+
+      /* Línea divisora */
+      .slide-divider {
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(90deg, var(--accent), transparent);
+        margin-bottom: 22px;
+        border: none;
+        opacity: 0.45;
+      }
+
+      /* Texto de cuerpo */
+      .slide-body {
+        font-size: 0.92rem;
+        font-weight: 300;
+        color: var(--fg-muted);
+        line-height: 1.75;
+        max-width: 100ch;
+      }
+
+      /* Lista de chips (funcionalidades, tech stack, etc.) */
+      .slide-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-top: 20px;
+        list-style: none;
+      }
+
+      .slide-chips li {
+        font-size: 0.76rem;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        color: var(--fg);
+        background: rgba(168, 194, 106, 0.11);
+        border: 1px solid rgba(168, 194, 106, 0.28);
+        padding: 5px 13px;
+        border-radius: var(--radius-pill);
+        white-space: nowrap;
+      }
+
+      /* Grid de dos columnas para el slide de equipo */
+      .team-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px 24px;
+        margin-top: 20px;
+      }
+
+      .team-member {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .team-member-name {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--fg);
+      }
+
+      .team-member-role {
+        font-size: 0.72rem;
+        font-weight: 400;
+        color: var(--fg-muted);
+        letter-spacing: 0.03em;
+      }
+
+      @keyframes progress-bar {
+        from {
+          width: 0%;
+        }
+        to {
+          width: 100%;
+        }
+      }
+
+      /* Fila de controles: puntos de navegación + flechas */
+      .carousel-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 28px;
+        flex-shrink: 0;
+      }
+
+      /* Puntos (dots) de navegación */
+      .carousel-dots {
+        display: flex;
+        gap: 8px;
+        list-style: none;
+      }
+
+      .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgba(168, 194, 106, 0.28);
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        transition:
+          background 0.25s,
+          transform 0.25s;
+      }
+
+      /* Dot activo */
+      .dot.active {
+        background: var(--accent);
+        transform: scale(1.35);
+      }
+
+      /* Flechas prev / next */
+      .carousel-arrows {
+        display: flex;
+        gap: 8px;
+      }
+
+      .arrow-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1px solid rgba(168, 194, 106, 0.3);
+        background: rgba(168, 194, 106, 0.08);
+        color: var(--fg);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          background 0.2s,
+          border-color 0.2s;
+        font-size: 14px;
+        line-height: 1;
+      }
+
+      .arrow-btn:hover {
+        background: rgba(168, 194, 106, 0.18);
+        border-color: rgba(168, 194, 106, 0.55);
+      }
+
+      /* Columa derecha */
+      .col-qr {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 64px 48px 80px 56px;
+        background: var(--glass-right);
+        backdrop-filter: blur(24px) saturate(1.2);
+        -webkit-backdrop-filter: blur(24px) saturate(1.2);
+      }
+
+      /* Texto sobre el QR */
+      .qr-label {
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 36px;
+        text-align: center;
+      }
+
+      /* Círculo grande con el QR */
+      .qr-circle-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: min(340px, 62vw);
+        height: min(340px, 62vw);
+        border-radius: 50%;
+        background: var(--circle-bg);
+        border: 2px solid rgba(168, 194, 106, 0.35);
+        box-shadow:
+          0 0 0 1px rgba(168, 194, 106, 0.1),
+          0 0 80px rgba(0, 0, 0, 0.6),
+          inset 0 1px 0 rgba(168, 194, 106, 0.15);
+      }
+
+      /* Anillos decorativos */
+      .qr-circle-wrapper::before {
+        content: "";
+        position: absolute;
+        inset: -10px;
+        border-radius: 50%;
+        border: 1px solid rgba(168, 194, 106, 0.12);
+        pointer-events: none;
+      }
+
+      .qr-circle-wrapper::after {
+        content: "";
+        position: absolute;
+        inset: -20px;
+        border-radius: 50%;
+        border: 1px solid rgba(168, 194, 106, 0.06);
+        pointer-events: none;
+      }
+
+      /* Contenedor del QR generado por qrcodejs */
+      #qr-container {
+        width: 65%;
+        height: auto;
+        border-radius: 12px;
+        padding: 12px;
+        background: var(--qr-bg);
+        display: block;
+      }
+
+      #qr-container canvas,
+      #qr-container img {
+        display: block;
+        border-radius: 6px;
+      }
+
+      /* Pista de uso */
+      .qr-hint {
+        margin-top: 32px;
+        text-align: center;
+        font-size: 0.8rem;
+        color: var(--fg-muted);
+        font-weight: 300;
+        line-height: 1.5;
+        max-width: 26ch;
+      }
+
+      .qr-hint strong {
+        display: block;
+        color: var(--fg);
+        font-weight: 500;
+        font-size: 0.875rem;
+        margin-bottom: 4px;
+      }
+
+      /* Botón de descarga */
+      .download-btn {
+        display: inline-block;
+        margin-top: 24px;
+        padding: 12px 32px;
+        border-radius: var(--radius-pill);
+        background: var(--accent);
+        color: #0d1a0f;
+        font-family: var(--font-body);
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition:
+          background 0.2s,
+          transform 0.15s;
+      }
+
+      .download-btn:hover {
+        background: #bdd47a;
+        transform: translateY(-2px);
+      }
+
+      /* Metadatos bajo el QR */
+      .qr-meta {
+        margin-top: 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+      }
+
+      .qr-meta-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .qr-meta-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+      }
+
+      .qr-meta-label {
+        font-size: 0.62rem;
+        font-weight: 600;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--fg-muted);
+      }
+
+      .qr-meta-value {
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--fg);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .qr-meta-sep {
+        width: 1px;
+        height: 24px;
+        background: var(--border);
+      }
+
+      /* Footer */
+      .footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px max(32px, env(safe-area-inset-left, 0px));
+        border-top: 1px solid var(--border);
+        background: rgba(5, 14, 6, 0.62);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .footer-text {
+        font-size: 0.68rem;
+        font-weight: 400;
+        letter-spacing: 0.05em;
+        color: var(--fg-muted);
+      }
+
+      .footer-text strong {
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      /* Responsive */
+      @media (max-width: 800px) {
+        .page-wrapper {
+          flex-direction: column;
+        }
+
+        .layout {
+          grid-template-columns: 1fr;
+          min-height: auto;
+          flex: 1;
+        }
+
+        /* En móvil el QR sube como hero */
+        .col-qr {
+          padding: 56px 24px 48px;
+          border-bottom: 1px solid var(--border);
+        }
+
+        .col-info {
+          padding: 40px 24px 40px;
+          border-right: none;
+        }
+
+        .qr-circle-wrapper {
+          width: min(260px, 70vw);
+          height: min(260px, 70vw);
+        }
+
+        .footer {
+          position: relative;
+          flex-direction: column;
+          gap: 6px;
+          text-align: center;
+        }
+
+        .team-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Main -->
+    <div class="page-wrapper">
+      <!-- Dos columnas principales -->
+      <div class="layout">
+        <!-- Columna izquierda -->
+        <section class="col-info">
+          <!-- Carousel: ventana + track con slides -->
+          <div class="carousel" id="carousel">
+            <div class="carousel-window">
+              <div class="carousel-track" id="carousel-track">
+                <!-- ---- SLIDE 1: Qué es ChileDex ---- -->
+                <div class="slide" data-slide="0">
+                  <p class="slide-eyebrow" data-num="01 / 05">La App</p>
+                  <h1 class="slide-title">
+                    Chile<span class="accent-char">Dex</span>
+                  </h1>
+                  <p class="slide-subtitle">
+                    Enciclopedia interactiva de flora y fauna chilena.
+                  </p>
+                  <hr class="slide-divider" />
+                  <p class="slide-body">
+                    ChileDex es una aplicación móvil que combina una
+                    enciclopedia interactiva de especies con un sistema de
+                    identificación visual mediante cámara. Permite a cualquier
+                    persona reconocer, registrar y aprender sobre la flora y
+                    fauna de Chile desde el celular.
+                  </p>
+                </div>
+
+                <!-- ---- SLIDE 2: La Problemática ---- -->
+                <div class="slide" data-slide="1">
+                  <p class="slide-eyebrow" data-num="02 / 05">El Problema</p>
+                  <h1 class="slide-title">
+                    ¿Por <span class="accent-char">qué?</span>
+                  </h1>
+                  <p class="slide-subtitle">
+                    Una brecha entre las personas, la actividad física y la
+                    naturaleza.
+                  </p>
+                  <hr class="slide-divider" />
+                  <p class="slide-body">
+                    Según la Encuesta Nacional de Calidad de Vida y Salud
+                    (ENCAVI 2023 - 2024), elaborado por el Ministerio de Salud
+                    en conjunto con la Dirección de Estudios Sociales de la
+                    Pontificia Universidad Católica de Chile (DESUC UC), más del
+                    51% de la población es físicamente inactiva, mientras que un
+                    33% declara no realizar ningún tipo de actividad física.
+                    Estas cifras representan un retroceso respecto a la medición
+                    anterior (ENCAVI 2015 - 2016). El director de la DESUC UC,
+                    Cristián Ayala, calificó este hallazgo como inesperado y
+                    subrayó la importancia de promover formas accesibles de
+                    movimiento, como la caminata, que no requieren
+                    infraestructura deportiva especializada.
+                  </p>
+                </div>
+
+                <!-- ---- SLIDE 3: Funcionalidades ---- -->
+                <div class="slide" data-slide="2">
+                  <p class="slide-eyebrow" data-num="03 / 05">Funciones</p>
+                  <h1 class="slide-title">
+                    ¿Qué <span class="accent-char">hace?</span>
+                  </h1>
+                  <p class="slide-subtitle">
+                    Todo lo que necesitas para explorar la flora y fauna que te
+                    rodea.
+                  </p>
+                  <hr class="slide-divider" />
+                  <p class="slide-body">
+                    Seis módulos diseñados para que la experiencia sea completa,
+                    desde la identificación hasta la gamificación:
+                  </p>
+                  <ul class="slide-chips">
+                    <li>Enciclopedia de especies</li>
+                    <li>Identificación con IA</li>
+                    <li>Registro de avistamientos</li>
+                    <li>Sistema de logros</li>
+                    <li>Eventos comunitarios</li>
+                    <li>Modo Santuario</li>
+                  </ul>
+                </div>
+
+                <!-- ---- SLIDE 4: Tecnología ---- -->
+                <div class="slide" data-slide="3">
+                  <p class="slide-eyebrow" data-num="04 / 05">Stack Técnico</p>
+                  <h1 class="slide-title">
+                    ¿Cómo fue <span class="accent-char">desarrollada?</span>
+                  </h1>
+                  <p class="slide-subtitle">
+                    Stack moderno · Metodología Scrum
+                  </p>
+                  <hr class="slide-divider" />
+                  <p class="slide-body">
+                    Desarrollada bajo metodología Scrum en sprints iterativos.
+                    El frontend en Flutter se comunica con un backend FastAPI
+                    desplegado en Vercel, una base de datos PostgreSQL alojada
+                    en Supabase, y un servicio en Google Cloud que ejecuta el
+                    modelo BioClip2 ajustado al proyecto.
+                  </p>
+                  <ul class="slide-chips">
+                    <li>Flutter</li>
+                    <li>FastAPI</li>
+                    <li>PostgreSQL · Supabase</li>
+                    <li>Google Cloud · Modelo de red neuronal BioClip2</li>
+                  </ul>
+                </div>
+
+                <!-- ---- SLIDE 5: Equipo ---- -->
+                <div class="slide" data-slide="4">
+                  <p class="slide-eyebrow" data-num="05 / 05">El Equipo</p>
+                  <h1 class="slide-title">
+                    Quiénes <span class="accent-char">lo hicieron posible</span>
+                  </h1>
+                  <p class="slide-subtitle">
+                    Proyecto de Título — Duoc UC, sede Antonio Varas
+                  </p>
+                  <hr class="slide-divider" />
+                  <p class="slide-body">
+                    Capstone 2026 · Ingeniería en Informática · Proyecto de
+                    título
+                  </p>
+                  <ul class="slide-chips">
+                    <li>Ignacio Correa</li>
+                    <li>Narayani García</li>
+                    <li>Alonso Vidal</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /carousel-track -->
+
+              <!-- Barra de progreso animada (se reinicia en cada slide) -->
+            </div>
+            <!-- /carousel-window -->
+
+            <!-- Controles: dots + flechas -->
+            <div class="carousel-controls">
+              <ul
+                class="carousel-dots"
+                id="carousel-dots"
+                role="tablist"
+                aria-label="Slides"
+              >
+                <!-- Los dots se generan desde JS -->
+              </ul>
+              <div class="carousel-arrows">
+                <button
+                  class="arrow-btn"
+                  id="btn-prev"
+                  aria-label="Slide anterior"
+                >
+                  &#8592;
+                </button>
+                <button
+                  class="arrow-btn"
+                  id="btn-next"
+                  aria-label="Slide siguiente"
+                >
+                  &#8594;
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- /carousel -->
+        </section>
+        <!-- /col-info -->
+
+        <!-- ============================================================
+             COLUMNA DERECHA: QR Code
+             ============================================================ -->
+        <section class="col-qr">
+          <p class="qr-label">Escanea para descargar</p>
+
+          <!-- Círculo con QR -->
+          <div class="qr-circle-wrapper">
+            <img
+              src="./img/chiledex_qr.svg"
+              alt="QR ChileDex"
+              id="qr-container"
+            />
+          </div>
+
+          <!-- Pista -->
+          <p class="qr-hint">
+            <strong>ChileDex</strong>
+            Apunta la cámara de tu celular al código QR para descargar la app
+          </p>
+
+          <!-- Botón de descarga -->
+          <a
+            class="download-btn"
+            href="https://drive.google.com/uc?export=download&id=1KGyqzPjqXKjnHwjCUvWgLqfyiQnuZvOK"
+            target="_blank"
+          >
+            Descargar
+          </a>
+
+          <!-- Metadatos de la app -->
+          <div class="qr-meta">
+            <div class="qr-meta-row">
+              <div class="qr-meta-item">
+                <span class="qr-meta-label">Plataforma</span>
+                <span class="qr-meta-value">Android / iOS (Próximamante)</span>
+              </div>
+              <div class="qr-meta-sep"></div>
+              <div class="qr-meta-item">
+                <span class="qr-meta-label">Versión</span>
+                <span class="qr-meta-value">1.0.0</span>
+              </div>
+              <div class="qr-meta-sep"></div>
+              <div class="qr-meta-item">
+                <span class="qr-meta-label">Estado</span>
+                <span class="qr-meta-value">Beta</span>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- /col-qr -->
+      </div>
+      <!-- /layout -->
+
+      <!-- Footer -->
+      <footer class="footer">
+        <span class="footer-text">
+          <strong>ChileDex</strong> &nbsp;·&nbsp; Proyecto de Título
+          &nbsp;·&nbsp; Ignacio Correa &nbsp;·&nbsp; Narayani García
+          &nbsp;·&nbsp; Alonso Vidal
+        </span>
+        <span class="footer-text">
+          Duoc UC | Sede Antonio Varas &nbsp;·&nbsp; 2026
+        </span>
+      </footer>
+    </div>
+    <!-- /page-wrapper -->
+
+    <script>
+      /* Carousel */
+
+      var TOTAL_SLIDES = 5;
+      var AUTO_INTERVAL = 10000;
+      var currentSlide = 0;
+      var autoTimer = null;
+      var paused = false;
+
+      var track = document.getElementById("carousel-track");
+      var dotsEl = document.getElementById("carousel-dots");
+
+      /* --- Crear los dots de navegación --- */
+      for (var i = 0; i < TOTAL_SLIDES; i++) {
+        var li = document.createElement("li");
+        var btn = document.createElement("button");
+        btn.className = "dot" + (i === 0 ? " active" : "");
+        btn.setAttribute("role", "tab");
+        btn.setAttribute("aria-label", "Ir al slide " + (i + 1));
+        btn.dataset.idx = i;
+        btn.addEventListener("click", onDotClick);
+        li.appendChild(btn);
+        dotsEl.appendChild(li);
+      }
+
+      /* --- Ir a un slide específico --- */
+      function goTo(idx) {
+        // Normalizar índice (circular)
+        idx = ((idx % TOTAL_SLIDES) + TOTAL_SLIDES) % TOTAL_SLIDES;
+        currentSlide = idx;
+
+        // Desplazar el track
+        track.style.transform = "translateX(-" + idx * 100 + "%)";
+
+        // Actualizar dots
+        var dots = dotsEl.querySelectorAll(".dot");
+        dots.forEach(function (d, i) {
+          d.className = "dot" + (i === idx ? " active" : "");
+        });
+
+        // Reiniciar barra de progreso
+        restartProgress();
+      }
+
+      /* --- Reiniciar animación de la barra de progreso --- */
+      function restartProgress() {
+        // Forzar reflow para reiniciar la animación CSS
+        progress.classList.remove("running");
+        void progress.offsetWidth; // reflow
+        if (!paused) progress.classList.add("running");
+      }
+
+      /* --- Avanzar automáticamente --- */
+      function startAuto() {
+        clearInterval(autoTimer);
+        autoTimer = setInterval(function () {
+          if (!paused) goTo(currentSlide + 1);
+        }, AUTO_INTERVAL);
+      }
+
+      /* --- Pausar al pasar el cursor (desktop) --- */
+      var carousel = document.getElementById("carousel");
+      carousel.addEventListener("mouseenter", function () {
+        paused = true;
+        progress.classList.remove("running");
+      });
+      carousel.addEventListener("mouseleave", function () {
+        paused = false;
+        restartProgress();
+      });
+
+      /* --- Click en dot --- */
+      function onDotClick(e) {
+        var idx = parseInt(e.currentTarget.dataset.idx, 10);
+        goTo(idx);
+        paused = false; // retoma el autoavance
+        restartProgress();
+      }
+
+      /* --- Flechas prev / next --- */
+      document
+        .getElementById("btn-prev")
+        .addEventListener("click", function () {
+          goTo(currentSlide - 1);
+          paused = false;
+        });
+      document
+        .getElementById("btn-next")
+        .addEventListener("click", function () {
+          goTo(currentSlide + 1);
+          paused = false;
+        });
+
+      /* --- Swipe táctil (móvil) --- */
+      var touchStartX = 0;
+      track.addEventListener(
+        "touchstart",
+        function (e) {
+          touchStartX = e.touches[0].clientX;
+          paused = true;
+        },
+        { passive: true },
+      );
+
+      track.addEventListener(
+        "touchend",
+        function (e) {
+          var dx = e.changedTouches[0].clientX - touchStartX;
+          if (Math.abs(dx) > 40) {
+            // umbral mínimo de 40px
+            goTo(currentSlide + (dx < 0 ? 1 : -1));
+          }
+          paused = false;
+          restartProgress();
+        },
+        { passive: true },
+      );
+
+      /* --- Inicializar --- */
+      goTo(0); // posición inicial + primera barra de progreso
+      startAuto(); // arrancar el autoavance
+    </script>
+  </body>
+</html>

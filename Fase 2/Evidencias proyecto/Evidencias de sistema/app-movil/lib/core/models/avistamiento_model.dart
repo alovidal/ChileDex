@@ -6,6 +6,7 @@ class AvistamientoMapaModel {
   final double longitud;
   final String fecha;
   final String? fotografiaUrl;
+  final String? lugarNombre;
 
   // Datos de la especie asociada
   final int    especieId;
@@ -23,6 +24,7 @@ class AvistamientoMapaModel {
     required this.especieNombre,
     required this.especieCategoria,
     this.especieFotoPortada,
+    this.lugarNombre,
   });
 
   factory AvistamientoMapaModel.fromJson(Map<String, dynamic> json) {
@@ -37,6 +39,7 @@ class AvistamientoMapaModel {
       especieNombre:      especie['nombre_comun'] as String,
       especieCategoria:   especie['categoria']    as String,
       especieFotoPortada: especie['foto_portada'] as String?,
+      lugarNombre: json['lugar_nombre'] as String?,
     );
   }
 

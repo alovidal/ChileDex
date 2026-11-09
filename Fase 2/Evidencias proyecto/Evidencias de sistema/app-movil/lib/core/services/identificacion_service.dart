@@ -11,7 +11,7 @@ import '../models/especie_model.dart';
 
 class IdentificacionService {
   static const String _baseUrl = ApiConfig.baseUrl;
-  static const String _baseUrl2 = 'http://192.168.1.18:8080';
+  static const String _baseUrl2 = 'https://stays-shredding-capable.ngrok-free.dev';
 
 
   Future<Map<String, dynamic>?> identificarEspecie(File imagen) async {

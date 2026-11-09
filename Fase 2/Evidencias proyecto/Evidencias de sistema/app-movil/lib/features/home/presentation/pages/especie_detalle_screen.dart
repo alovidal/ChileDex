@@ -441,23 +441,12 @@ class _EspecieDetalleScreenState extends State<EspecieDetalleScreen> {
   }
 
   Widget _buildAvistamientoChip(AvistamientoDetalleModel a) {
-    final ubicacion = (a.latitud != null && a.longitud != null)
-        ? '${a.latitud!.toStringAsFixed(2)}, ${a.longitud!.toStringAsFixed(2)}'
-        : 'Sin ubicación';
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         color: AppTheme.cardWhite,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppTheme.lightGray),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -473,15 +462,18 @@ class _EspecieDetalleScreenState extends State<EspecieDetalleScreen> {
           ),
           const SizedBox(height: 3),
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Icons.location_on_outlined,
+              Icon(
+                a.latitud != null
+                    ? Icons.location_on_outlined
+                    : Icons.location_off_outlined,
                 size: 11,
                 color: AppTheme.textGray,
               ),
               const SizedBox(width: 3),
               Text(
-                ubicacion,
+                a.textoUbicacion, // ← usar getter
                 style: TextStyle(fontSize: 11, color: AppTheme.textGray),
               ),
             ],
@@ -496,11 +488,11 @@ class _EspecieDetalleScreenState extends State<EspecieDetalleScreen> {
   Widget _buildSectionLabel(String label) => Text(
     label,
     style: GoogleFonts.outfit(
-        fontSize: 13,
-        fontWeight: FontWeight.w900,
-        color: AppTheme.successGreen,
-        letterSpacing: 0.8,
-      )
+      fontSize: 13,
+      fontWeight: FontWeight.w900,
+      color: AppTheme.successGreen,
+      letterSpacing: 0.8,
+    ),
   );
 
   Widget _buildError() => const Center(

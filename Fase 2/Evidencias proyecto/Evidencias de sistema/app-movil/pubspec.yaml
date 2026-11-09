@@ -1,0 +1,59 @@
+name: chiledex
+description: "Enciclopedia interactiva y sistema de reconocimiento de flora y fauna chilena."
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.13.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  google_fonts: ^6.2.1
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
+  geolocator: ^13.0.0
+  http: ^1.2.1
+  shared_preferences: ^2.3.2
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.3
+  image_picker: ^1.1.2
+  camera: ^0.11.0
+  dio: ^5.7.0
+  http_parser: ^4.0.2
+  flutter_map_location_marker: ^9.1.1
+  flutter_svg: ^2.0.10+1
+  flutter_native_splash: ^2.4.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - lib/app/assets/images/
+    - lib/app/assets/images/acerca_de/
+    - lib/app/assets/images/logros/
+    - lib/app/assets/images/backgrounds/
+
+# Icono
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "lib/app/assets/images/chiledex_logo.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#E8ECE9"            
+  adaptive_icon_foreground: "lib/app/assets/images/chiledex_logo.png"
+
+# Splah
+flutter_native_splash:
+  color:            "#E8ECE9"         
+  background_image:            "lib/app/assets/images/splash.jpg" 
+  android_12:
+    color:          "#E8ECE9"
+    background_image:          "lib/app/assets/images/splash.jpg"
+  fullscreen:       true
