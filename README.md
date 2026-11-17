@@ -57,7 +57,40 @@ Al abrir cada sprint elegimos las historias, las partimos en tareas y estimamos 
 Los artefactos que mantenemos son el Product Backlog, un Sprint Backlog por sprint y la Definición de Terminado.
 
 
-## Ejecucion Local
+## Ejecución local
+
+### Prerrequisitos
+
+- Tener instalado [Flutter SDK](https://docs.flutter.dev/get-started/install) y un SDK de Dart compatible con el proyecto (`^3.13.1`).
+- Contar con Google Chrome, un emulador Android/iOS o un dispositivo físico conectado.
+
+Verifica que el entorno esté configurado correctamente:
+
+```bash
+flutter doctor
+```
+
+### Instalación y ejecución
+
+Desde la raíz del repositorio, entra a la carpeta de la aplicación móvil e instala sus dependencias:
+
+```bash
+cd "Fase 2\Evidencias proyecto\Evidencias de sistema\app-movil"
+flutter pub get
+```
+
+Revisa los dispositivos disponibles e inicia la aplicación. Para ejecutarla en Chrome:
+
+```bash
+flutter devices
+flutter run -d chrome
+```
+
+También puedes usar `flutter run` para elegir un dispositivo disponible o indicar su identificador:
+
+```bash
+flutter run -d <device_id>
+```
 
 ---
 *Desarrollado para la asignatura Capstone - Docente: Rocio Contreras Aguila.*
